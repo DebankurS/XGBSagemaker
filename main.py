@@ -25,3 +25,6 @@ def predict(inputdata: PredictionRequest):
         prediction = model.predict(data)
 
         return {"predictions": prediction.tolist()}
+@app.get("/ping")
+def health_check():
+    return {"Health":"OK"}

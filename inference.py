@@ -1,7 +1,9 @@
 import os
 import json
+import sys
 import numpy as np
 from xgboost import XGBRanker
+from sagemaker_inference import default_handler, model_server
 
 # 1. Load the model from disk
 def model_fn(model_dir):
@@ -32,3 +34,14 @@ def output_fn(prediction, accept):
         return json.dumps({"predictions": prediction.tolist()}), 'application/json'
     else:
         raise ValueError(f"Unsupported accept type: {accept}")
+
+# Serve function to start the inference server
+def serve():
+    # Starts the SageMaker inference server which automatically calls the above functions
+    model_server.start_model_server(handler=default_handler.DefaultHandler())
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "serve":
+        serve()
+    else:
+        print("Usage: python inference.py serve")

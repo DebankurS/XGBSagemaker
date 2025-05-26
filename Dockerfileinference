@@ -1,0 +1,23 @@
+# Start from official Python base
+FROM python:3.11
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Install basic packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    build-essential \
+    libgomp1 \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install XGBoost 3.0.2
+RUN pip install --upgrade pip \
+    && pip install xgboost==3.0.2 sagemaker-training pandas numpy scikit-learn sagemaker-inference
+
+COPY inference.py /opt/ml/code/inference.py
+ENV PYTHONPATH=/opt/ml/code

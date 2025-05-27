@@ -15,13 +15,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install XGBoost 3.0.2
-RUN pip install --upgrade pip \
-    && pip install xgboost==3.0.2 sagemaker-training pandas numpy scikit-learn
+COPY ./requirements-training.txt /opt/ml/code/requirements.txt
+
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy training script
 COPY train.py /opt/ml/code/train.py
-COPY inference.py /opt/ml/code/inference.py
 ENV PYTHONPATH=/opt/ml/code
 
 # Define entry point

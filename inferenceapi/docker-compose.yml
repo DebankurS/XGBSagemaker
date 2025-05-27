@@ -1,0 +1,9 @@
+name: xgbsagemaker
+services:
+  modelinference:
+    build: .
+    container_name: modelinference
+    volumes:
+      - ./modeldir:/modeldir
+    ports:
+      - 8080:8080
